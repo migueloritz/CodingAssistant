@@ -1308,7 +1308,7 @@ ${suggestions.length > 0 ? suggestions.map(suggestion => `- ${suggestion}`).join
     const words = description.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
     const relevantWords = words.filter(word => 
       word.length > 2 && 
-      !['the', 'and', 'for', 'that', 'with', 'from', 'into', 'this', 'will', 'can', 'should'].includes(word)
+      !['the', 'and', 'for', 'that', 'from', 'into', 'this', 'will', 'can', 'should', 'function'].includes(word)
     );
     
     return relevantWords.slice(0, 3).join('_') || 'generated_function';
@@ -1319,10 +1319,15 @@ ${suggestions.length > 0 ? suggestions.map(suggestion => `- ${suggestion}`).join
     const words = description.split(/\s+/);
     const relevantWords = words.filter(word => 
       word.length > 2 && 
-      !['the', 'and', 'for', 'that', 'with', 'from', 'into', 'this', 'will', 'can', 'should'].includes(word.toLowerCase())
+      !['the', 'and', 'for', 'that', 'from', 'into', 'this', 'will', 'can', 'should', 'create', 'class', 'service', 'handler'].includes(word.toLowerCase())
     );
     
-    const className = relevantWords.slice(0, 2)
+    // Take the first meaningful words, as they usually represent the core concept
+    // e.g., "create a user manager class" -> ["user", "manager"] -> "UserManager"
+    // e.g., "data processor service" -> ["data", "processor"] -> "DataProcessor"
+    // e.g., "api client handler" -> ["api", "client"] -> "ApiClient"
+    const classWords = relevantWords.slice(0, 2);
+    const className = classWords
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join('');
     

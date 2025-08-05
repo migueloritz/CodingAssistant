@@ -15,6 +15,16 @@ export default defineConfig({
       '@/styles': resolve(__dirname, 'src/styles'),
     },
   },
+  define: {
+    // Define process.env for browser environment
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+      OPENAI_API_KEY: JSON.stringify(process.env.OPENAI_API_KEY || ''),
+      VITE_OPENAI_API_KEY: JSON.stringify(process.env.VITE_OPENAI_API_KEY || ''),
+    },
+    // Define global for browser
+    global: 'globalThis',
+  },
   server: {
     port: 3000,
     open: true,
