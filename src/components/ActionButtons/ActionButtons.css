@@ -1,0 +1,358 @@
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.action-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-button-wrapper {
+  position: relative;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.action-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--action-color);
+}
+
+.action-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.action-button.primary {
+  background: var(--action-color);
+  color: white;
+  border-color: var(--action-color);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+}
+
+.action-button.primary:hover:not(:disabled) {
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
+}
+
+.action-button.secondary {
+  background: var(--surface-color);
+  color: var(--action-color);
+  border-color: var(--action-color);
+}
+
+.action-button.secondary:hover:not(:disabled) {
+  background: var(--action-color);
+  color: white;
+}
+
+.action-button.tertiary {
+  background: var(--surface-color);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.action-button.tertiary:hover:not(:disabled) {
+  background: var(--action-color);
+  color: white;
+  border-color: var(--action-color);
+}
+
+.action-button.active {
+  background: var(--action-color);
+  color: white;
+  border-color: var(--action-color);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.action-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+  position: relative;
+}
+
+.button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-label {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.button-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: inherit;
+  animation: pulse 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.action-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tooltip-background);
+  color: var(--tooltip-text);
+  border-radius: 6px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  white-space: nowrap;
+  opacity: 0;
+  animation: tooltipFadeIn 0.2s ease forwards;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.tooltip-content {
+  padding: 12px 16px;
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.tooltip-title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.tooltip-shortcut {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tooltip-description {
+  margin: 0;
+  font-size: 12px;
+  color: var(--tooltip-text-secondary);
+  line-height: 1.4;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--tooltip-background);
+}
+
+.action-buttons-secondary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 16px;
+  border-left: 1px solid var(--border-color);
+}
+
+.settings-button {
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--surface-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-button:hover:not(:disabled) {
+  background: var(--hover-color);
+  color: var(--text-primary);
+}
+
+.settings-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quick-action-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .action-buttons {
+    gap: 12px;
+  }
+  
+  .action-buttons-group {
+    gap: 6px;
+  }
+  
+  .action-button {
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 36px;
+  }
+  
+  .button-label {
+    display: none;
+  }
+  
+  .action-tooltip {
+    display: none;
+  }
+  
+  .action-buttons-secondary {
+    padding-left: 12px;
+    gap: 8px;
+  }
+  
+  .quick-action-indicator {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .action-buttons-group {
+    justify-content: space-between;
+  }
+  
+  .action-button {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 8px;
+    min-height: 32px;
+  }
+  
+  .action-buttons-secondary {
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    padding-left: 0;
+    padding-top: 8px;
+    justify-content: center;
+  }
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .action-tooltip {
+    --tooltip-background: #2a2a2a;
+    --tooltip-text: #ffffff;
+    --tooltip-text-secondary: #cccccc;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .action-tooltip {
+    --tooltip-background: #ffffff;
+    --tooltip-text: #333333;
+    --tooltip-text-secondary: #666666;
+  }
+}
+
+/* Focus styles for accessibility */
+.action-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.settings-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .action-button {
+    border-width: 2px;
+  }
+  
+  .action-button.primary {
+    border-color: white;
+  }
+}

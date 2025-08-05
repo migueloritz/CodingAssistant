@@ -1,0 +1,414 @@
+/* Main App Layout */
+.app {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-primary);
+  overflow: hidden;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--header-background);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  min-height: 64px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  background: linear-gradient(135deg, var(--primary-color), #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Main Content Area */
+.app-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 280px 1fr 380px;
+  grid-template-areas: "sidebar editor output";
+  gap: 1px;
+  background: var(--border-color);
+  overflow: hidden;
+}
+
+.app-sidebar {
+  grid-area: sidebar;
+  background: var(--surface-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-editor {
+  grid-area: editor;
+  background: var(--surface-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-output {
+  grid-area: output;
+  background: var(--surface-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Status Bar */
+.app-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: var(--header-background);
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+  font-size: 12px;
+  min-height: 32px;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-item {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.status-item:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.provider-selector {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.provider-selector:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background: var(--background-secondary);
+}
+
+.provider-selector:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+
+/* Large tablets and small desktops */
+@media (max-width: 1200px) {
+  .app-main {
+    grid-template-columns: 240px 1fr 320px;
+  }
+  
+  .app-header {
+    padding: 10px 16px;
+  }
+  
+  .header-left {
+    gap: 20px;
+  }
+  
+  .app-title {
+    font-size: 18px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 968px) {
+  .app-main {
+    grid-template-columns: 200px 1fr 280px;
+  }
+  
+  .app-header {
+    padding: 8px 12px;
+    min-height: 56px;
+  }
+  
+  .header-left {
+    gap: 16px;
+  }
+  
+  .app-title {
+    font-size: 16px;
+  }
+  
+  .status-left {
+    gap: 12px;
+  }
+  
+  .status-right {
+    gap: 12px;
+  }
+}
+
+/* Mobile landscape and small tablets */
+@media (max-width: 768px) {
+  .app-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 
+      "sidebar"
+      "editor"
+      "output";
+  }
+  
+  .app-sidebar {
+    max-height: 120px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .app-output {
+    max-height: 200px;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .app-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    min-height: auto;
+  }
+  
+  .header-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .app-status-bar {
+    padding: 6px 12px;
+    flex-direction: column;
+    gap: 4px;
+    min-height: auto;
+  }
+  
+  .status-left,
+  .status-right {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 480px) {
+  .app-header {
+    padding: 8px;
+  }
+  
+  .header-left {
+    gap: 12px;
+  }
+  
+  .app-title {
+    font-size: 14px;
+  }
+  
+  .app-sidebar {
+    max-height: 100px;
+  }
+  
+  .app-output {
+    max-height: 160px;
+  }
+  
+  .app-status-bar {
+    padding: 4px 8px;
+  }
+  
+  .status-item {
+    font-size: 11px;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1600px) {
+  .app-main {
+    grid-template-columns: 320px 1fr 440px;
+  }
+  
+  .app-header {
+    padding: 16px 24px;
+  }
+  
+  .app-status-bar {
+    padding: 10px 24px;
+  }
+}
+
+/* Compact mode for small screens */
+@media (max-height: 600px) {
+  .app-header {
+    min-height: 48px;
+    padding: 6px 16px;
+  }
+  
+  .app-title {
+    font-size: 16px;
+  }
+  
+  .app-status-bar {
+    min-height: 24px;
+    padding: 4px 16px;
+    font-size: 11px;
+  }
+  
+  .app-sidebar {
+    max-height: 80px;
+  }
+  
+  .app-output {
+    max-height: 120px;
+  }
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .app {
+    background: var(--background-primary);
+  }
+  
+  .app-title {
+    filter: brightness(1.1);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .app-header,
+  .app-status-bar {
+    border-width: 2px;
+  }
+  
+  .app-main {
+    gap: 2px;
+  }
+}
+
+/* Print mode */
+@media print {
+  .app-header,
+  .app-status-bar,
+  .app-sidebar,
+  .app-output {
+    display: none;
+  }
+  
+  .app-main {
+    grid-template-columns: 1fr;
+    grid-template-areas: "editor";
+  }
+  
+  .app-editor {
+    height: auto;
+    overflow: visible;
+  }
+}
+
+/* Loading states */
+.app.loading {
+  pointer-events: none;
+}
+
+.app.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Focus management */
+.app:focus-within .app-editor {
+  box-shadow: inset 0 0 0 2px var(--primary-color);
+}
+
+/* Error states */
+.app.error .app-header {
+  background: rgba(239, 68, 68, 0.1);
+  border-bottom-color: var(--error-color);
+}
+
+/* Success states */
+.app.success .app-status-bar {
+  background: rgba(34, 197, 94, 0.1);
+  border-top-color: var(--success-color);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .app * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .app-header {
+    min-height: 56px;
+  }
+  
+  .app-status-bar {
+    min-height: 40px;
+  }
+  
+  .status-item {
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,189 @@
+.code-editor {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--editor-background);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.code-editor.dark {
+  --editor-background: #1e1e1e;
+  --editor-text: #d4d4d4;
+  --border-color: #333;
+}
+
+.code-editor.light {
+  --editor-background: #ffffff;
+  --editor-text: #333333;
+  --border-color: #e0e0e0;
+}
+
+.editor-container {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* CodeMirror customizations */
+.code-editor .cm-editor {
+  background: transparent !important;
+  color: var(--editor-text);
+}
+
+.code-editor .cm-content {
+  caret-color: #4f46e5;
+}
+
+.code-editor .cm-cursor {
+  border-left-color: #4f46e5;
+}
+
+.code-editor .cm-selectionBackground {
+  background: rgba(79, 70, 229, 0.2) !important;
+}
+
+.code-editor .cm-focused .cm-selectionBackground {
+  background: rgba(79, 70, 229, 0.3) !important;
+}
+
+.code-editor .cm-activeLine {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.code-editor .cm-activeLineGutter {
+  background: transparent;
+}
+
+/* Syntax highlighting adjustments */
+.code-editor .cm-keyword {
+  color: #569cd6;
+  font-weight: 500;
+}
+
+.code-editor .cm-string {
+  color: #ce9178;
+}
+
+.code-editor .cm-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
+.code-editor .cm-number {
+  color: #b5cea8;
+}
+
+.code-editor .cm-operator {
+  color: #d4d4d4;
+}
+
+.code-editor .cm-variableName {
+  color: #9cdcfe;
+}
+
+.code-editor .cm-typeName {
+  color: #4ec9b0;
+}
+
+.code-editor .cm-function {
+  color: #dcdcaa;
+}
+
+/* Scrollbar styling */
+.code-editor .cm-scroller::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.code-editor .cm-scroller::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.code-editor .cm-scroller::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+}
+
+.code-editor .cm-scroller::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Search panel styling */
+.code-editor .cm-search {
+  background: var(--editor-background);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.code-editor .cm-search input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: var(--editor-text);
+}
+
+/* Autocomplete styling */
+.code-editor .cm-tooltip-autocomplete {
+  background: var(--editor-background);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.code-editor .cm-completionIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.code-editor .cm-completionLabel {
+  color: var(--editor-text);
+}
+
+.code-editor .cm-completionDetail {
+  color: #888;
+  font-size: 0.9em;
+}
+
+/* Error/warning styling */
+.code-editor .cm-diagnostic-error {
+  border-bottom: 2px wavy #f87171;
+}
+
+.code-editor .cm-diagnostic-warning {
+  border-bottom: 2px wavy #fbbf24;
+}
+
+.code-editor .cm-diagnostic-info {
+  border-bottom: 2px wavy #60a5fa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .code-editor .cm-content {
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .code-editor .cm-lineNumbers {
+    padding: 0 6px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .code-editor .cm-content {
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  .code-editor .cm-lineNumbers {
+    padding: 0 4px;
+    font-size: 11px;
+  }
+}
