@@ -51,9 +51,6 @@ function App() {
     
     // Update current file if it exists
     if (currentFile) {
-      const extension = newLanguage === 'python' ? '.py' : 
-                      newLanguage === 'javascript' ? '.js' : '.cpp';
-      
       // Update through file manager
       if (currentFile.id) {
         fileManager.updateFileContent(currentFile.id, currentFile.content);
@@ -96,28 +93,6 @@ function App() {
 
   const handleFileSave = async (file: FileContent) => {
     await fileManager.saveFile(file);
-  };
-  
-  const handleTabClose = (fileId: string) => {
-    fileManager.closeFile(fileId);
-    
-    // Update code and language if active file changed
-    const newActiveFile = fileManager.activeFile;
-    if (newActiveFile) {
-      setCode(newActiveFile.content);
-      setLanguage(newActiveFile.language);
-    } else {
-      // No files open, create a new one
-      const newFile = fileManager.createNewFile();
-      setCode(newFile.content);
-      setLanguage(newFile.language);
-    }
-  };
-  
-  const handleTabSwitch = (file: FileContent) => {
-    fileManager.switchToFile(file);
-    setCode(file.content);
-    setLanguage(file.language);
   };
 
   // Handle actions with AI integration - memoized to prevent unnecessary re-renders

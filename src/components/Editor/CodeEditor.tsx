@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { EditorView, ViewUpdate } from '@codemirror/view';
 import { EditorState, Extension } from '@codemirror/state';
-import { basicSetup } from '@codemirror/basic-setup';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { python } from '@codemirror/lang-python';
 import { javascript } from '@codemirror/lang-javascript';
@@ -38,8 +37,8 @@ export const CodeEditor: React.FC<EditorProps> = ({
   useEffect(() => {
     if (!editorRef.current) return;
 
+    // Create minimal extensions to avoid complex dependencies
     const extensions: Extension[] = [
-      basicSetup,
       getLanguageExtension(language),
       EditorView.updateListener.of((update: ViewUpdate) => {
         if (update.docChanged) {
@@ -52,7 +51,7 @@ export const CodeEditor: React.FC<EditorProps> = ({
           onCursorChange(cursor);
         }
       }),
-      EditorState.readOnly.of(readOnly),
+      EditorState.readOnly.of(readOnly || false),
       EditorView.theme({
         '&': {
           height: '100%',

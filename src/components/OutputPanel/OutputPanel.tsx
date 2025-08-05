@@ -10,8 +10,7 @@ import {
   ChevronDown,
   ChevronRight,
   Clock,
-  RefreshCw,
-  ExternalLink
+  RefreshCw
 } from 'lucide-react';
 import './OutputPanel.css';
 
