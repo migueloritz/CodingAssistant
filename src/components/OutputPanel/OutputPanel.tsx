@@ -9,7 +9,9 @@ import {
   Copy,
   ChevronDown,
   ChevronRight,
-  Clock
+  Clock,
+  RefreshCw,
+  ExternalLink
 } from 'lucide-react';
 import './OutputPanel.css';
 
@@ -28,9 +30,10 @@ const sanitizeContent = (content: string): string => {
 interface OutputPanelProps {
   outputs: OutputResult[];
   onClear: () => void;
+  onRetry?: (outputId: string) => void;
 }
 
-export const OutputPanel: React.FC<OutputPanelProps> = ({ outputs, onClear }) => {
+export const OutputPanel: React.FC<OutputPanelProps> = ({ outputs, onClear, onRetry }) => {
   const [collapsedItems, setCollapsedItems] = useState<Set<string>>(new Set());
   const [selectedTab, setSelectedTab] = useState<'all' | 'errors' | 'warnings' | 'success'>('all');
 
@@ -79,6 +82,29 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({ outputs, onClear }) =>
       default:
         return 'Output';
     }
+  };
+
+  const isRetryableError = (output: OutputResult): boolean => {
+    if (output.status !== 'error') return false;
+    
+    const content = output.content.toLowerCase();
+    return content.includes('connection') ||
+           content.includes('network') ||
+           content.includes('timeout') ||
+           content.includes('rate limit') ||
+           content.includes('try again') ||
+           content.includes('check your connection');
+  };
+
+  const getErrorCategory = (output: OutputResult): string => {
+    if (output.status !== 'error') return '';
+    
+    const content = output.content.toLowerCase();
+    if (content.includes('network') || content.includes('connection')) return 'Network Error';
+    if (content.includes('api key') || content.includes('authentication')) return 'Authentication Error';
+    if (content.includes('rate limit') || content.includes('quota')) return 'Rate Limit Error';
+    if (content.includes('no code')) return 'Input Error';
+    return 'Unknown Error';
   };
 
   const filteredOutputs = outputs.filter(output => {
@@ -171,7 +197,7 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({ outputs, onClear }) =>
                     {getStatusIcon(output.status)}
                     
                     <span className="output-type">
-                      {getTypeLabel(output.type)}
+                      {output.status === 'error' ? getErrorCategory(output) : getTypeLabel(output.type)}
                     </span>
                     
                     {output.language && (
@@ -185,23 +211,52 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({ outputs, onClear }) =>
                       <span>{output.timestamp.toLocaleTimeString()}</span>
                     </div>
 
-                    <button
-                      className="copy-button"
-                      onClick={() => copyToClipboard(output.content)}
-                      title="Copy to clipboard"
-                    >
-                      <Copy size={14} />
-                    </button>
+                    <div className="output-actions">
+                      {isRetryableError(output) && onRetry && (
+                        <button
+                          className="retry-button"
+                          onClick={() => onRetry(output.id)}
+                          title="Retry this operation"
+                        >
+                          <RefreshCw size={14} />
+                        </button>
+                      )}
+                      
+                      <button
+                        className="copy-button"
+                        onClick={() => copyToClipboard(output.content)}
+                        title="Copy to clipboard"
+                      >
+                        <Copy size={14} />
+                      </button>
+                    </div>
                   </div>
 
                   {!isCollapsed && (
                     <div className="output-item-content">
-                      <pre 
-                        className="output-text"
-                        dangerouslySetInnerHTML={{ 
-                          __html: sanitizeContent(output.content) 
-                        }}
-                      />
+                      {output.status === 'error' ? (
+                        <div className="error-content">
+                          <pre 
+                            className="output-text error-text"
+                            dangerouslySetInnerHTML={{ 
+                              __html: sanitizeContent(output.content) 
+                            }}
+                          />
+                          {isRetryableError(output) && (
+                            <div className="error-help">
+                              <Info size={14} />
+                              <span>This error might be temporary. You can try the operation again.</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <pre 
+                          className="output-text"
+                          dangerouslySetInnerHTML={{ 
+                            __html: sanitizeContent(output.content) 
+                          }}
+                        />
+                      )}
                     </div>
                   )}
                 </div>

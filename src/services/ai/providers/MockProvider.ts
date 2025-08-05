@@ -1308,10 +1308,10 @@ ${suggestions.length > 0 ? suggestions.map(suggestion => `- ${suggestion}`).join
     const words = description.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
     const relevantWords = words.filter(word => 
       word.length > 2 && 
-      !['the', 'and', 'for', 'that', 'from', 'into', 'this', 'will', 'can', 'should'].includes(word)
+      !['the', 'and', 'for', 'that', 'from', 'into', 'this', 'will', 'can', 'should', 'function'].includes(word)
     );
     
-    return relevantWords.slice(0, 4).join('_') || 'generated_function';
+    return relevantWords.slice(0, 3).join('_') || 'generated_function';
   }
 
   private extractClassName(description: string): string {

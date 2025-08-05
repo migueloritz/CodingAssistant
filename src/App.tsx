@@ -126,7 +126,7 @@ function App() {
       const errorOutput: OutputResult = {
         id: Date.now().toString(),
         type: 'execution',
-        content: 'Error: No code to process',
+        content: 'Error: No code to process. Please write some code before using AI actions.',
         timestamp: new Date(),
         status: 'error',
         language,
@@ -166,30 +166,30 @@ function App() {
               }
             }
           } else {
-            content = 'Failed to generate code. Please try again.';
+            content = 'Failed to generate code. Please check your connection and try again.';
           }
           break;
 
         case 'explain':
           response = await ai.explainCode(code, language);
           outputType = 'explanation';
-          content = response ? response.content : 'Failed to explain code. Please try again.';
+          content = response ? response.content : 'Failed to explain code. Please check your connection and try again.';
           break;
 
         case 'improve':
           response = await ai.improveCode(code, language);
           outputType = 'improvement';
-          content = response ? response.content : 'Failed to improve code. Please try again.';
+          content = response ? response.content : 'Failed to improve code. Please check your connection and try again.';
           break;
 
         case 'debug':
           response = await ai.debugCode(code, language);
           outputType = 'analysis';
-          content = response ? response.content : 'Failed to debug code. Please try again.';
+          content = response ? response.content : 'Failed to debug code. Please check your connection and try again.';
           break;
 
         default:
-          content = `Action "${action}" not implemented yet.`;
+          content = `Action "${action}" is not implemented yet. Available actions: generate, explain, improve, debug.`;
           break;
       }
 
@@ -205,19 +205,74 @@ function App() {
       setOutputs(prev => [newOutput, ...prev]);
 
     } catch (error) {
+      // Enhanced error handling with more detailed information
+      let errorMessage = 'An unexpected error occurred.';
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error && typeof error === 'object' && 'message' in error) {
+        errorMessage = String(error.message);
+      }
+
+      // Add recovery suggestions based on error type
+      let recoverySuggestion = '';
+      if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        recoverySuggestion = '\n\nRecovery suggestions:\n• Check your internet connection\n• Verify API configuration\n• Try again in a few moments';
+      } else if (errorMessage.includes('API key') || errorMessage.includes('authentication')) {
+        recoverySuggestion = '\n\nRecovery suggestions:\n• Check API key configuration\n• Verify provider settings\n• Switch to mock provider for testing';
+      } else if (errorMessage.includes('rate limit') || errorMessage.includes('quota')) {
+        recoverySuggestion = '\n\nRecovery suggestions:\n• Wait before making another request\n• Switch to a different provider\n• Reduce request frequency';
+      }
+
       const errorOutput: OutputResult = {
         id: Date.now().toString(),
         type: 'execution',
-        content: `Error: ${error}`,
+        content: `Error: ${errorMessage}${recoverySuggestion}`,
         timestamp: new Date(),
         status: 'error',
         language,
       };
       
       setOutputs(prev => [errorOutput, ...prev]);
+
+      // Log error for debugging (in development)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('AI Action Error:', error);
+      }
     }
   }, [code, language, ai, currentFile, fileManager]);
 
+  // Handle retry of failed operations
+  const handleRetry = useCallback(async (outputId: string) => {
+    // Find the output to retry
+    const output = outputs.find(o => o.id === outputId);
+    if (!output || output.status !== 'error') return;
+
+    // Extract the action type from the output type
+    let action = '';
+    switch (output.type) {
+      case 'execution':
+        action = 'generate';
+        break;
+      case 'explanation':
+        action = 'explain';
+        break;
+      case 'improvement':
+        action = 'improve';
+        break;
+      case 'analysis':
+        action = 'debug';
+        break;
+      default:
+        return;
+    }
+
+    // Remove the failed output and retry the action
+    setOutputs(prev => prev.filter(o => o.id !== outputId));
+    await handleAction(action);
+  }, [outputs, handleAction]);
   // Add AI status display in the status bar
   const getAIStatus = (): string => {
     if (ai.state.isLoading) return 'AI Processing...';
@@ -273,6 +328,7 @@ function App() {
           <OutputPanel
             outputs={outputs}
             onClear={() => setOutputs([])}
+            onRetry={handleRetry}
           />
         </section>
       </main>

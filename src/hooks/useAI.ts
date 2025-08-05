@@ -166,8 +166,45 @@ export const useAI = (options: UseAIOptions = {}): UseAIReturn => {
       }
     }
     
-    const errorMessage = error instanceof AIError ? error.message : `An unexpected error occurred: ${error}`;
-    setState(prev => ({ ...prev, error: errorMessage, isLoading: false, isStreaming: false }));
+    // Enhanced error message formatting with recovery suggestions
+    let errorMessage = 'An unexpected error occurred.';
+    let recoverySuggestion = '';
+    
+    if (error instanceof AIError) {
+      errorMessage = error.message;
+      
+      // Add specific recovery suggestions based on error code
+      switch (error.code) {
+        case 'NETWORK_ERROR':
+          recoverySuggestion = '\n\nRecovery suggestions:\n• Check your internet connection\n• Try switching to a different provider\n• Wait a moment and retry';
+          break;
+        case 'AUTH_ERROR':
+        case 'INVALID_API_KEY':
+          recoverySuggestion = '\n\nRecovery suggestions:\n• Verify your API key in settings\n• Check API key permissions\n• Try using the mock provider for testing';
+          break;
+        case 'RATE_LIMIT_EXCEEDED':
+          recoverySuggestion = '\n\nRecovery suggestions:\n• Wait before making another request\n• Switch to a different provider\n• Reduce request frequency';
+          break;
+        case 'PROVIDER_UNAVAILABLE':
+          recoverySuggestion = '\n\nRecovery suggestions:\n• Try a different AI provider\n• Check provider status\n• Use mock provider for testing';
+          break;
+        default:
+          if (error.retryable) {
+            recoverySuggestion = '\n\nThis error might be temporary. Try the operation again.';
+          }
+      }
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    } else if (error && typeof error === 'object' && 'message' in error) {
+      errorMessage = String(error.message);
+    }
+
+    setState(prev => ({ 
+      ...prev, 
+      error: errorMessage + recoverySuggestion, 
+      isLoading: false, 
+      isStreaming: false 
+    }));
     return null;
   }, [autoRetry, retryDelay]);
 
