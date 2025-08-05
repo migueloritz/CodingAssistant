@@ -89,11 +89,14 @@ Object.defineProperty(global, 'showDirectoryPicker', {
   writable: true,
 });
 
-export default {
-  MockFileSystemFileHandle,
-  MockFileSystemWritableFileStream,
-  MockFile,
+// Export the API object that the test expects
+export const mockFileSystemAPI = {
   mockShowOpenFilePicker,
   mockShowSaveFilePicker,
   mockShowDirectoryPicker,
+  MockFileSystemFileHandle,
+  MockFileSystemWritableFileStream,
+  MockFile,
 };
+
+export default mockFileSystemAPI;

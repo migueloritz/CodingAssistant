@@ -54,10 +54,10 @@ export class OpenAIProvider implements AIProvider {
     };
     this.baseURL = config.baseURL || 'https://api.openai.com/v1';
     
-    // Secure API key handling - prioritize environment variable
+    // Secure API key handling - prioritize configuration and environment variables
     this.apiKey = config.apiKey || 
-                  (import.meta as any).env?.VITE_OPENAI_API_KEY || 
                   process.env.OPENAI_API_KEY || 
+                  process.env.VITE_OPENAI_API_KEY || 
                   '';
     
     if (!this.apiKey) {
